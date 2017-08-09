@@ -1,1 +1,2 @@
 krakenex
+tabulate
