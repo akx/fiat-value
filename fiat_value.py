@@ -1,12 +1,13 @@
 from argparse import ArgumentParser
 from configparser import RawConfigParser
 
-import krakenex
 from decimal import Decimal
 
 from collections import defaultdict
+
 from tabulate import tabulate
 
+from exchange_apis import KrakenAPI
 from call_cacher import CallCacher
 from libfiatvalue import compute_fiat_values, get_balances, get_order_prices_and_vols
 
@@ -24,6 +25,7 @@ def parse_balance_pairs(pairs):
             raise ValueError('Unable to parse %s (%s)' % (pair, exc))
     return balances
 
+
 def main():
     ap = ArgumentParser()
     ap.add_argument('--fiat', default='USD', help='fiat currency (default %(default)s)')
@@ -34,18 +36,23 @@ def main():
     set_balances = parse_balance_pairs(args.set_balance or ())
     add_balances = parse_balance_pairs(args.add_balance or ())
     fiat = args.fiat
-    kraken_api = krakenex.API(key=config.get('kraken', 'key'), secret=config.get('kraken', 'secret'))
+
+    kraken_api = KrakenAPI(
+        client_id=None,
+        api_key=config.get('kraken', 'key'),
+        api_secret=config.get('kraken', 'secret'),
+    )
     if args.cache_ttl > 0:
         kraken_api = CallCacher('kraken', kraken_api, ttl=args.cache_ttl)
 
-    process_and_print(kraken_api, fiat, set_balances, add_balances)
-
-
-def process_and_print(kraken_api, fiat, set_balances={}, add_balances={}):
     balances = get_balances(kraken_api)
     balances.update(set_balances)
     for asset, value in add_balances.items():
         balances[asset] = balances.get(asset, 0) + value
+    process_and_print(kraken_api, fiat, balances)
+
+
+def process_and_print(kraken_api, fiat, balances):
     pvs = get_order_prices_and_vols(kraken_api, fiat=fiat)
     rows = compute_fiat_values(kraken_api, balances=balances, pvs=pvs, fiat=fiat)
     print(tabulate(rows, headers='keys', floatfmt='+.2f'))

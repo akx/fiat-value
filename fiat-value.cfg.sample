@@ -1,3 +1,8 @@
 [kraken]
 key = Umlja0FzdGxleSEh
 secret = V2UncmUgbm8gc3RyYW5nZXJzIHRvIGxvdmUKWW91IGtub3cgdGhlIHJ1bGVzIGFuZCBzbyBkbyBJCkEgZnVsbCBjb21taXRtZW50J3Mgd2hhdCBJJ20gdGhpbmtpbmcgb2YKWW91IHdvdWxkbid0IGdldCB0aGlzIGZyb20gYW55IG90aGVyIGd1eQ==
+
+[bitstamp]
+customer_id = 123456
+key = Umlja0FzdGxleSEh
+secret = Umlja0FzdGxleSEh

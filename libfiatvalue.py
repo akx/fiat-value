@@ -35,7 +35,7 @@ def get_balances(kraken_api):
 
 
 def get_ticker(kraken_api, coins, fiat='USD'):
-    pairs = ['%s%s' % (coin, fiat) for coin in coins if coin != fiat]
+    pairs = ['%s%s' % (coin, fiat) for coin in coins if coin not in ('EUR', 'USD', fiat)]
     values = {}
     for pair, info in kraken_api.query_public('Ticker', {'pair': ','.join(pairs)})['result'].items():
         assert pair.endswith(fiat)
