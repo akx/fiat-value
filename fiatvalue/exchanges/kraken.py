@@ -11,6 +11,7 @@ from fiatvalue.exchanges.base import BaseAPI
 
 class KrakenAPI(BaseAPI):
     url_format = 'https://api.kraken.com/0/{endpoint}'
+    id = 'kraken'
 
     def _sign_request(self, request_args, params):
         if not (self.api_key and self.api_secret):

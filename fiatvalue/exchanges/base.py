@@ -5,6 +5,7 @@ from fiatvalue.excs import APIError
 
 class BaseAPI:
     url_format = None
+    id = None
 
     def __init__(self, client_id, api_key, api_secret):
         self.client_id = client_id
@@ -41,3 +42,7 @@ class BaseAPI:
 
     def get_ticker(self, coins, fiat='USD'):
         raise NotImplementedError('...')
+
+    @property
+    def enabled(self):
+        return (self.api_key and self.api_secret)
