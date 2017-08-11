@@ -17,10 +17,10 @@ def compute_fiat_values(*, ticker, balances, pvs, fiat='USD'):
         curr_value_of_free = free_total * ticker_value
         curr_value_of_bought = bought_total * ticker_value
         curr_value_total = (curr_value_of_free + curr_value_of_bought)
-        fiat_position = curr_value_of_free + (curr_value_of_bought - price_of_bought)
+        fiat_position = (curr_value_of_bought - price_of_bought)
         position_perc = (
-            '%+.2f%%' % (((curr_value_total / price_of_bought) - 1) * 100)
-            if (fiat_position and price_of_bought)
+            '%+.2f%%' % (((curr_value_of_bought / price_of_bought) - 1) * 100)
+            if (curr_value_of_bought and price_of_bought)
             else (
                 'free money :)'
                 if curr_value_total > 0 and price_of_bought == 0
@@ -30,6 +30,7 @@ def compute_fiat_values(*, ticker, balances, pvs, fiat='USD'):
         rows.append({
             'coin': coin,
             'avg_buy_price': avg_buy_price,
+            'curr_buy_price': ticker_value,
             'balance': balance,
             'bought_total': bought_total,
             'free_total': free_total,
