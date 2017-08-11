@@ -5,8 +5,8 @@ def compute_fiat_values(*, ticker, balances, pvs, fiat='USD'):
         if pvs['buy'][coin]:
             buy_prices, buy_vols = zip(*pvs['buy'][coin])
             bought_total = sum(buy_vols)
-            avg_buy_price = sum(buy_prices) / len(buy_prices)  # TODO: This could be better
-            price_of_bought = avg_buy_price * bought_total
+            price_of_bought = sum(p * v for (p, v) in zip(buy_prices, buy_vols))
+            avg_buy_price = price_of_bought / bought_total
         else:
             avg_buy_price = None
             bought_total = 0
